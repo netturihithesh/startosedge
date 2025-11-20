@@ -1,0 +1,105 @@
+.programs {
+    background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+}
+
+.section-header {
+    margin-bottom: var(--spacing-3xl);
+}
+
+.section-header h2 {
+    font-size: var(--font-size-4xl);
+    margin-bottom: var(--spacing-md);
+}
+
+.section-description {
+    font-size: var(--font-size-lg);
+    color: var(--text-secondary);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.programs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.program-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.program-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    transform: scaleX(0);
+    transition: transform var(--transition-base);
+    transform-origin: left;
+}
+
+.program-card:hover::before {
+    transform: scaleX(1);
+}
+
+.program-icon {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
+    border-radius: var(--radius-lg);
+    font-size: 2rem;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    transition: all var(--transition-base);
+}
+
+.program-card:hover .program-icon {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+}
+
+.program-title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0;
+}
+
+.program-description {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    flex-grow: 1;
+    margin-bottom: 0;
+}
+
+.program-meta {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.program-btn {
+    width: 100%;
+    margin-top: auto;
+    justify-content: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .programs-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-header h2 {
+        font-size: var(--font-size-3xl);
+    }
+}
