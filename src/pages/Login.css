@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-xl) var(--spacing-md);
+    padding: 120px var(--spacing-md) var(--spacing-xl);
     background: var(--bg-primary);
     position: relative;
     overflow: hidden;
@@ -159,10 +159,38 @@
     color: var(--primary);
 }
 
+.btn-google {
+    background: white;
+    color: #333;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    padding: 0.6rem 1rem !important;
+    /* Override global btn padding */
+    height: auto;
+    font-size: 0.95rem;
+}
+
+.btn-google:hover {
+    background: #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+.btn-google img {
+    width: 20px;
+    height: 20px;
+}
+
 .login-benefits {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
+    padding-top: var(--spacing-2xl);
 }
 
 .login-benefits h2 {

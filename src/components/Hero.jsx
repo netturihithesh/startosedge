@@ -1,7 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Hero.css';
 
 const Hero = () => {
+    const navigate = useNavigate();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    // Check login status
+    useEffect(() => {
+        const checkLoginStatus = () => {
+            const token = localStorage.getItem('token');
+            setIsLoggedIn(!!token);
+        };
+
+        // Initial check
+        checkLoginStatus();
+
+        // Listen for login/logout events
+        window.addEventListener('user-login', checkLoginStatus);
+        window.addEventListener('storage', checkLoginStatus);
+
+        return () => {
+            window.removeEventListener('user-login', checkLoginStatus);
+            window.removeEventListener('storage', checkLoginStatus);
+        };
+    }, []);
+
+    const handleGetStarted = () => {
+        if (isLoggedIn) {
+            // Scroll to Programs section
+            const programsSection = document.getElementById('programs');
+            if (programsSection) {
+                programsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        } else {
+            // Redirect to login
+            navigate('/login');
+        }
+    };
+
     return (
         <section className="hero" id="home">
             <div className="hero-background">
@@ -26,8 +63,8 @@ const Hero = () => {
                     </p>
 
                     <div className="hero-actions fade-in-up">
-                        <button className="btn btn-primary btn-lg">
-                            Get Plan Started
+                        <button className="btn btn-primary btn-lg" onClick={handleGetStarted}>
+                            {isLoggedIn ? 'View Programs' : 'Get Plan Started'}
                             <svg className="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                             </svg>

@@ -5,8 +5,8 @@
 
 .features-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-2xl);
+    grid-template-columns: 1fr;
+    gap: var(--spacing-3xl);
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -34,10 +34,15 @@
     color: var(--primary-light);
 }
 
-.feature-list {
-    display: flex;
-    flex-direction: column;
+.features-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: var(--spacing-md);
+}
+
+.feature-card {
+    padding: var(--spacing-md) !important;
+    /* Override global card padding */
 }
 
 .feature-item {
@@ -48,21 +53,29 @@
 
 .feature-bullet {
     color: var(--primary-light);
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-lg);
     line-height: 1.4;
     flex-shrink: 0;
+}
+
+.feature-text {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.feature-subtitle {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
 }
 
 .feature-item p {
     margin: 0;
     color: var(--text-secondary);
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-sm);
     line-height: 1.6;
-}
-
-.feature-item strong {
-    color: var(--text-primary);
-    font-weight: 600;
 }
 
 /* Responsive */

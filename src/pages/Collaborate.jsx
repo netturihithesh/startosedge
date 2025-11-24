@@ -1,8 +1,73 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Collaborate.css';
 
 const Collaborate = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userName, setUserName] = useState('');
+    const [formData, setFormData] = useState({
+        message: '',
+        role: '',
+        organization: ''
+    });
+    const [submitted, setSubmitted] = useState(false);
+
+    useEffect(() => {
+        // Check login status
+        const checkAuth = () => {
+            const token = localStorage.getItem('token');
+            const name = localStorage.getItem('userName');
+            if (token && name) {
+                setIsLoggedIn(true);
+                setUserName(name);
+            } else {
+                setIsLoggedIn(false);
+                setUserName('');
+            }
+        };
+
+        checkAuth();
+
+        // Listen for login events
+        window.addEventListener('user-login', checkAuth);
+        window.addEventListener('storage', checkAuth);
+
+        return () => {
+            window.removeEventListener('user-login', checkAuth);
+            window.removeEventListener('storage', checkAuth);
+        };
+    }, []);
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        // Here you can add actual form submission logic (e.g., send to backend)
+        console.log('Form submitted:', {
+            userName,
+            email: localStorage.getItem('userEmail') || 'N/A',
+            ...formData
+        });
+
+        setSubmitted(true);
+
+        // Reset form after 3 seconds
+        setTimeout(() => {
+            setSubmitted(false);
+            setFormData({
+                message: '',
+                role: '',
+                organization: ''
+            });
+        }, 3000);
+    };
+
     const individualOptions = [
         'Mentor with us: guide cohorts and review capstone projects',
         'Become a trainer: deliver modules in your area of expertise',
@@ -53,10 +118,80 @@ const Collaborate = () => {
                 <div className="container">
                     <div className="contact-card card">
                         <h3>Contact Us</h3>
-                        <p>Please log in to send us your details.</p>
-                        <Link to="/login" className="btn btn-primary">
-                            Login / Sign Up
-                        </Link>
+
+                        {isLoggedIn ? (
+                            submitted ? (
+                                <div className="success-message">
+                                    <div style={{ fontSize: '48px', marginBottom: '1rem' }}>✅</div>
+                                    <h4>Thank you for reaching out!</h4>
+                                    <p>We've received your message and will get back to you soon.</p>
+                                </div>
+                            ) : (
+                                <form onSubmit={handleSubmit} className="contact-form">
+                                    <p style={{ marginBottom: '1.5rem', color: 'var(--text-secondary)' }}>
+                                        Welcome, <strong style={{ color: 'var(--primary-light)' }}>{userName}</strong>!
+                                        Fill out the form below to get in touch with us.
+                                    </p>
+
+                                    <div className="form-group">
+                                        <label htmlFor="role">I am interested as:</label>
+                                        <select
+                                            id="role"
+                                            name="role"
+                                            value={formData.role}
+                                            onChange={handleChange}
+                                            required
+                                        >
+                                            <option value="">Select an option</option>
+                                            <option value="individual-mentor">Individual - Mentor</option>
+                                            <option value="individual-trainer">Individual - Trainer</option>
+                                            <option value="individual-content">Individual - Content Creator</option>
+                                            <option value="organization-hiring">Organization - Hiring Partner</option>
+                                            <option value="organization-training">Organization - Training Partner</option>
+                                            <option value="college">College/University</option>
+                                            <option value="school">School</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label htmlFor="organization">Organization (if applicable):</label>
+                                        <input
+                                            type="text"
+                                            id="organization"
+                                            name="organization"
+                                            value={formData.organization}
+                                            onChange={handleChange}
+                                            placeholder="Enter your organization name"
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label htmlFor="message">Message:</label>
+                                        <textarea
+                                            id="message"
+                                            name="message"
+                                            value={formData.message}
+                                            onChange={handleChange}
+                                            placeholder="Tell us about your requirements and how you'd like to collaborate..."
+                                            rows="5"
+                                            required
+                                        ></textarea>
+                                    </div>
+
+                                    <button type="submit" className="btn btn-primary">
+                                        Send Message
+                                    </button>
+                                </form>
+                            )
+                        ) : (
+                            <>
+                                <p>Please log in to send us your details.</p>
+                                <Link to="/login" className="btn btn-primary">
+                                    Login / Sign Up
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </div>
             </section>
