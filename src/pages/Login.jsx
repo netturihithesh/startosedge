@@ -20,10 +20,12 @@ const Login = () => {
     });
     const [loading, setLoading] = useState(false);
     const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
+    const toastShownRef = React.useRef(false);
 
     useEffect(() => {
-        if (location.state?.message) {
+        if (location.state?.message && !toastShownRef.current) {
             showInfo(location.state.message);
+            toastShownRef.current = true;
             // Clear state so it doesn't show again on refresh
             window.history.replaceState({}, document.title);
         }
