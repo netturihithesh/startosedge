@@ -268,3 +268,8 @@ button.mobile-nav-btn {
         margin-top: var(--spacing-sm);
     }
 }
+.nav-link:hover { color: var(--text-primary); }
+.nav-link:hover::after { width: 100%; }
+.admin-link { background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.15)); padding: 0.5rem 1rem; border-radius: var(--radius-md); border: 1px solid rgba(239, 68, 68, 0.3); }
+.admin-link::after { display: none; }
+.admin-link:hover { background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(220, 38, 38, 0.25)); border-color: rgba(239, 68, 68, 0.5); }

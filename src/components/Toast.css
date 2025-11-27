@@ -11,7 +11,7 @@
     gap: var(--spacing-md);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(20px);
-    z-index: 10000;
+    z-index: 10002;
     animation: slideIn 0.3s ease-out;
 }
 

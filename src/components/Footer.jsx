@@ -9,7 +9,7 @@ const Footer = () => {
                     <div className="footer-column">
                         <h3 className="footer-logo">StartosEdge</h3>
                         <p className="footer-description">
-                            Empowering careers through world-class training and guaranteed placement opportunities.
+                            Empowering careers through world-class training and dedicated career support.
                         </p>
                         <div className="social-links">
                             <a href="#" className="social-link">

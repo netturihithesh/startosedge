@@ -165,6 +165,39 @@
     z-index: 2;
 }
 
+/* Edit Pencil Button */
+.edit-btn-pencil {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    /* Positioned at top right */
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+    font-size: 1.2rem;
+}
+
+.edit-btn-pencil:hover {
+    transform: scale(1.1);
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Adjust category badge if admin is present to avoid overlap */
+.admin-mode .category-badge {
+    right: 56px;
+    /* Move left to make room for pencil */
+}
+
 .program-content {
     padding: var(--spacing-lg);
     display: flex;
@@ -271,6 +304,7 @@
     gap: 10px;
     cursor: pointer;
     user-select: none;
+    line-height: 1;
 }
 
 .checkbox-group input[type="checkbox"] {
@@ -278,6 +312,7 @@
     height: 18px;
     margin: 0;
     accent-color: var(--primary);
+    flex-shrink: 0;
 }
 
 .admin-form label {
@@ -307,6 +342,19 @@
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+
+.admin-form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    /* Increased gap */
+}
+
+.admin-form-actions .btn {
+    flex: 1;
+    justify-content: center;
+    padding: 0.75rem;
 }
 
 /* Responsive */

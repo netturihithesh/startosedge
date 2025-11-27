@@ -75,7 +75,7 @@ const Collaborate = () => {
     ];
 
     const organizationOptions = [
-        'Hire-trained talent via our placement programs',
+        'Hire-trained talent via our career programs',
         'Co-create custom upskilling tracks with your SMEs',
         'Offer real-world problem statements and internships'
     ];
@@ -89,7 +89,7 @@ const Collaborate = () => {
     const collegePrograms = [
         'Aptitude + Reasoning + Coding interview prep',
         'Company-specific drives: mock tests and interviews',
-        'Capstone-based portfolio and placement assistance'
+        'Capstone-based portfolio and career support'
     ];
 
     const schoolPrograms = [

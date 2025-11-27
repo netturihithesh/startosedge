@@ -39,28 +39,40 @@ const SignUp = () => {
                 formData.password
             );
 
+            // Create user document in Firestore FIRST
+            try {
+                await setDoc(doc(db, 'users', userCredential.user.uid), {
+                    name: formData.fullName,
+                    email: formData.email,
+                    role: 'user',
+                    createdAt: new Date()
+                });
+            } catch (firestoreError) {
+                // If Firestore creation fails, delete the auth user so they can try again
+                console.error('Firestore creation failed:', firestoreError);
+                await userCredential.user.delete();
+                throw new Error('Failed to create user profile. Please try again.');
+            }
+
             // Send verification email
             await sendEmailVerification(userCredential.user);
 
-            // Create user document in Firestore
-            await setDoc(doc(db, 'users', userCredential.user.uid), {
-                name: formData.fullName,
-                email: formData.email,
-                role: 'user',
-                createdAt: new Date()
-            });
+            // Sign out the user so they must verify email before logging in
+            await auth.signOut();
 
-            success('Account created! Verification email sent. Please check your inbox.');
+            success('Account created! Verification email sent. Please check your inbox and verify before logging in.');
             setTimeout(() => {
                 navigate('/login');
-            }, 3000);
+            }, 4000);
         } catch (error) {
             console.error('Signup error:', error);
-            setLoading(false);
             let errorMessage = 'Signup failed. Please try again.';
             if (error.code === 'auth/email-already-in-use') errorMessage = 'Email already in use.';
-            if (error.code === 'auth/weak-password') errorMessage = 'Password is too weak.';
+            if (error.code === 'auth/weak-password') errorMessage = 'Password is too weak (minimum 6 characters).';
+            if (error.message.includes('Failed to create user profile')) errorMessage = error.message;
             showError(errorMessage);
+        } finally {
+            setLoading(false);
         }
     };
 

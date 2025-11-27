@@ -7,6 +7,7 @@ import { db } from '../firebase';
 import { useToast } from '../hooks/useToast';
 import Toast from '../components/Toast';
 import Modal from '../components/Modal';
+import { checkProfileCompleteness } from '../utils/profileUtils';
 import './Login.css';
 
 const Login = () => {
@@ -36,9 +37,16 @@ const Login = () => {
                 return;
             }
 
+            // Check profile completeness
+            const { isComplete } = await checkProfileCompleteness(userCredential.user.uid);
+
             success('Login successful!');
             setTimeout(() => {
-                navigate('/');
+                if (!isComplete) {
+                    navigate('/profile');
+                } else {
+                    navigate('/');
+                }
             }, 1500);
         } catch (error) {
             console.error('Login error:', error);
@@ -67,9 +75,16 @@ const Login = () => {
                 });
             }
 
+            // Check profile completeness
+            const { isComplete } = await checkProfileCompleteness(user.uid);
+
             success('Google login successful!');
             setTimeout(() => {
-                navigate('/');
+                if (!isComplete) {
+                    navigate('/profile');
+                } else {
+                    navigate('/');
+                }
             }, 1500);
         } catch (error) {
             console.error('Google login error:', error);

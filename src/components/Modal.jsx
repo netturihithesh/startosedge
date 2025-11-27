@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Modal.css';
 
-const Modal = ({ title, message, onConfirm, onCancel, inputPlaceholder, type = 'confirm' }) => {
+const Modal = ({ title, message, onConfirm, onCancel, inputPlaceholder, type = 'confirm', confirmText, inputType = 'text', loading = false }) => {
     const [inputValue, setInputValue] = useState('');
 
     const handleConfirm = () => {
@@ -23,7 +23,7 @@ const Modal = ({ title, message, onConfirm, onCancel, inputPlaceholder, type = '
                     <p>{message}</p>
                     {type === 'prompt' && (
                         <input
-                            type="text"
+                            type={inputType}
                             className="modal-input"
                             placeholder={inputPlaceholder}
                             value={inputValue}
@@ -38,11 +38,11 @@ const Modal = ({ title, message, onConfirm, onCancel, inputPlaceholder, type = '
                     )}
                 </div>
                 <div className="modal-footer">
-                    <button className="btn btn-secondary" onClick={onCancel}>
+                    <button className="btn btn-secondary" onClick={onCancel} disabled={loading}>
                         Cancel
                     </button>
-                    <button className="btn btn-primary" onClick={handleConfirm}>
-                        {type === 'prompt' ? 'Submit' : 'Confirm'}
+                    <button className="btn btn-primary" onClick={handleConfirm} disabled={loading}>
+                        {loading ? 'Sending...' : (confirmText || (type === 'prompt' ? 'Submit' : 'Confirm'))}
                     </button>
                 </div>
             </div>

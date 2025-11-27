@@ -50,7 +50,7 @@ const Hero = () => {
             <div className="container">
                 <div className="hero-content">
                     <div className="hero-badge fade-in-up">
-                        <span>🎯 Personalized Career Guidance & Placement Support</span>
+                        <span>🎯 Personalized Career Guidance & Industry Mentorship</span>
                     </div>
 
                     <h1 className="hero-title fade-in-up">
@@ -59,7 +59,7 @@ const Hero = () => {
 
                     <p className="hero-description fade-in-up">
                         We guide job-seeking students and working professionals with personalized roadmaps for their learning.
-                        Transition from placements to career advancement with StartosEdge.
+                        Transition from learning to career advancement with StartosEdge.
                     </p>
 
                     <div className="hero-actions fade-in-up">
@@ -74,11 +74,11 @@ const Hero = () => {
                     <div className="hero-stats">
                         <div className="stat-card fade-in-up">
                             <h3 className="stat-number">500+</h3>
-                            <p className="stat-label">Job Offers</p>
+                            <p className="stat-label">Careers Launched</p>
                         </div>
                         <div className="stat-card fade-in-up">
                             <h3 className="stat-number">95%</h3>
-                            <p className="stat-label">Success Rate</p>
+                            <p className="stat-label">Satisfaction Rate</p>
                         </div>
                         <div className="stat-card fade-in-up">
                             <h3 className="stat-number">₹8 LPA</h3>

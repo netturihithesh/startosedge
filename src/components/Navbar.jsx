@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
+import { useAdmin } from '../hooks/useAdmin';
 import './Navbar.css';
 
 const Navbar = () => {
     const [user, setUser] = useState(null);
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { isAdmin } = useAdmin();
 
     useEffect(() => {
         // Listen for Firebase auth state changes
@@ -93,6 +95,11 @@ const Navbar = () => {
                         <Link to="/taskhub" className="nav-link" onClick={handleLinkClick}>TaskHub</Link>
                         <Link to="/collaborate" className="nav-link" onClick={handleLinkClick}>Collaborate</Link>
                         <Link to="/about" className="nav-link" onClick={handleLinkClick}>About Us</Link>
+                        {isAdmin && (
+                            <Link to="/admin/users" className="nav-link admin-link" onClick={handleLinkClick}>
+                                Admin
+                            </Link>
+                        )}
 
                         {/* Mobile-only user menu */}
                         <div className="mobile-user-section">

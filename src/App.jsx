@@ -14,6 +14,7 @@ import Internships from './pages/Internships';
 import TaskHub from './pages/TaskHub';
 import Profile from './pages/Profile';
 import FinishSignUp from './pages/FinishSignUp';
+import AdminUsers from './pages/AdminUsers';
 import ScrollToTop from './components/ScrollToTop';
 import './App.css';
 
@@ -21,18 +22,11 @@ import { auth } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useEffect } from 'react';
 
-function App() {
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user && !user.emailVerified) {
-                // If user is logged in but not verified, sign them out
-                console.log("User not verified, signing out...");
-                auth.signOut();
-            }
-        });
+import ProtectedRoute from './components/ProtectedRoute';
 
-        return () => unsubscribe();
-    }, []);
+function App() {
+    // Global auth listener removed to prevent race conditions during signup
+    // Verification is enforced at Login page instead
 
     return (
         <Router>
@@ -40,18 +34,52 @@ function App() {
             <div className="App">
                 <Navbar />
                 <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/programs" element={<ProgramsDetail />} />
-                    <Route path="/programs/:id" element={<CourseViewer />} />
-                    <Route path="/internships" element={<Internships />} />
-                    <Route path="/collaborate" element={<Collaborate />} />
-                    <Route path="/contact" element={<Contact />} />
+                    {/* Public Routes */}
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<SignUp />} />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/taskhub" element={<TaskHub />} />
                     <Route path="/finishSignUp" element={<FinishSignUp />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/about" element={<About />} />
+
+                    {/* Protected Routes (Require Login + Complete Profile) */}
+                    <Route path="/" element={
+                        <ProtectedRoute>
+                            <Home />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/programs" element={
+                        <ProtectedRoute>
+                            <ProgramsDetail />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/programs/:id" element={
+                        <ProtectedRoute>
+                            <CourseViewer />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/internships" element={
+                        <ProtectedRoute>
+                            <Internships />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/collaborate" element={
+                        <ProtectedRoute>
+                            <Collaborate />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/taskhub" element={
+                        <ProtectedRoute>
+                            <TaskHub />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/admin/users" element={
+                        <ProtectedRoute>
+                            <AdminUsers />
+                        </ProtectedRoute>
+                    } />
+
+                    {/* Profile Route (Protected by Login, but allows incomplete profile) */}
+                    <Route path="/profile" element={<Profile />} />
                 </Routes>
                 <Footer />
             </div>

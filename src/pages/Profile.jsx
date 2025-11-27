@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
@@ -9,6 +9,7 @@ import './Profile.css';
 
 const Profile = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const { toasts, removeToast, success, error: showError } = useToast();
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -58,6 +59,14 @@ const Profile = () => {
     };
 
     useEffect(() => {
+        // Check for redirect warning
+        if (location.state?.showIncompleteProfileWarning) {
+            showError('Please complete your profile (Name, Email, Education) to access other pages.');
+            setIsEditing(true);
+            // Clear the state so it doesn't show again on refresh
+            window.history.replaceState({}, document.title);
+        }
+
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 navigate('/login');
@@ -98,7 +107,7 @@ const Profile = () => {
         });
 
         return () => unsubscribe();
-    }, []);
+    }, [location.state]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
