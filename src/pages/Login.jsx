@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { auth, googleProvider } from '../firebase';
 import { signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -12,13 +12,22 @@ import './Login.css';
 
 const Login = () => {
     const navigate = useNavigate();
-    const { toasts, success, error: showError, removeToast } = useToast();
+    const location = useLocation();
+    const { toasts, success, error: showError, info: showInfo, removeToast } = useToast();
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
     const [loading, setLoading] = useState(false);
     const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
+
+    useEffect(() => {
+        if (location.state?.message) {
+            showInfo(location.state.message);
+            // Clear state so it doesn't show again on refresh
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state, showInfo]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });

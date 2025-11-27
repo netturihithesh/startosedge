@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 import './Hero.css';
 
 const Hero = () => {
@@ -8,22 +10,11 @@ const Hero = () => {
 
     // Check login status
     useEffect(() => {
-        const checkLoginStatus = () => {
-            const token = localStorage.getItem('token');
-            setIsLoggedIn(!!token);
-        };
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            setIsLoggedIn(!!user);
+        });
 
-        // Initial check
-        checkLoginStatus();
-
-        // Listen for login/logout events
-        window.addEventListener('user-login', checkLoginStatus);
-        window.addEventListener('storage', checkLoginStatus);
-
-        return () => {
-            window.removeEventListener('user-login', checkLoginStatus);
-            window.removeEventListener('storage', checkLoginStatus);
-        };
+        return () => unsubscribe();
     }, []);
 
     const handleGetStarted = () => {
@@ -34,8 +25,8 @@ const Hero = () => {
                 programsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         } else {
-            // Redirect to login
-            navigate('/login');
+            // Redirect to login with a message
+            navigate('/login', { state: { message: "Login to open program section", type: "info" } });
         }
     };
 

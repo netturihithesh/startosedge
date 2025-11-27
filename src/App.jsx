@@ -35,6 +35,7 @@ function App() {
                 <Navbar />
                 <Routes>
                     {/* Public Routes */}
+                    <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/finishSignUp" element={<FinishSignUp />} />
@@ -42,11 +43,6 @@ function App() {
                     <Route path="/about" element={<About />} />
 
                     {/* Protected Routes (Require Login + Complete Profile) */}
-                    <Route path="/" element={
-                        <ProtectedRoute>
-                            <Home />
-                        </ProtectedRoute>
-                    } />
                     <Route path="/programs" element={
                         <ProtectedRoute>
                             <ProgramsDetail />

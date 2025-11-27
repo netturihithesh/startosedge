@@ -40,7 +40,7 @@ const ProtectedRoute = ({ children }) => {
 
     // If not logged in, redirect to login
     if (!user) {
-        return <Navigate to="/login" state={{ from: location }} replace />;
+        return <Navigate to="/login" state={{ from: location, message: "Please login to access this section", type: "info" }} replace />;
     }
 
     // If logged in but profile incomplete, and not already on profile page
