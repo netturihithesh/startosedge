@@ -8,6 +8,8 @@ import Toast from '../components/Toast';
 import { useNavigate } from 'react-router-dom';
 import './ProgramsDetail.css';
 import '../components/Modal.css';
+import Cropper from 'react-easy-crop';
+import getCroppedImg from '../utils/cropImage';
 
 const ProgramsDetail = () => {
     const navigate = useNavigate();
@@ -39,6 +41,13 @@ const ProgramsDetail = () => {
 
     const [thumbnailFile, setThumbnailFile] = useState(null);
     const [authLoading, setAuthLoading] = useState(true);
+
+    // Cropper state
+    const [crop, setCrop] = useState({ x: 0, y: 0 });
+    const [zoom, setZoom] = useState(1);
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+    const [tempImageSrc, setTempImageSrc] = useState(null);
+    const [showCropper, setShowCropper] = useState(false);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -108,12 +117,42 @@ const ProgramsDetail = () => {
                 showError('Please select an image file');
                 return;
             }
-            if (file.size > 2 * 1024 * 1024) {
-                showError('Image size should be less than 2MB');
+            // Limit raw file size to 10MB to allow high res upload before crop
+            if (file.size > 10 * 1024 * 1024) {
+                showError('Image size should be less than 10MB');
                 return;
             }
-            setThumbnailFile(file);
+
+            const reader = new FileReader();
+            reader.addEventListener('load', () => {
+                setTempImageSrc(reader.result);
+                setShowCropper(true);
+            });
+            reader.readAsDataURL(file);
         }
+    };
+
+    const onCropComplete = (croppedArea, croppedAreaPixels) => {
+        setCroppedAreaPixels(croppedAreaPixels);
+    };
+
+    const handleCropSave = async () => {
+        try {
+            const croppedImageBlob = await getCroppedImg(tempImageSrc, croppedAreaPixels);
+            const file = new File([croppedImageBlob], "thumbnail.jpg", { type: "image/jpeg" });
+            setThumbnailFile(file);
+            setShowCropper(false);
+            setTempImageSrc(null);
+        } catch (e) {
+            console.error(e);
+            showError("Failed to crop image");
+        }
+    };
+
+    const handleCropCancel = () => {
+        setShowCropper(false);
+        setTempImageSrc(null);
+        // Reset file input if needed, but difficult with React state binding to input
     };
 
     const uploadThumbnail = async (file) => {
@@ -540,6 +579,49 @@ const ProgramsDetail = () => {
                                     </button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Image Cropper Modal */}
+            {showCropper && (
+                <div className="modal-overlay" style={{ zIndex: 10002 }}>
+                    <div className="modal-content" style={{ width: '90%', maxWidth: '600px', height: '80vh', display: 'flex', flexDirection: 'column' }}>
+                        <div className="modal-header">
+                            <h3>Crop Image</h3>
+                            <button className="modal-close" onClick={handleCropCancel}>×</button>
+                        </div>
+                        <div className="modal-body" style={{ flex: 1, position: 'relative', minHeight: '300px', background: '#333', overflow: 'hidden', borderRadius: '8px' }}>
+                            <Cropper
+                                image={tempImageSrc}
+                                crop={crop}
+                                zoom={zoom}
+                                aspect={16 / 9}
+                                onCropChange={setCrop}
+                                onCropComplete={onCropComplete}
+                                onZoomChange={setZoom}
+                            />
+                        </div>
+                        <div className="modal-footer" style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'space-between' }}>
+                            <div style={{ flex: 1, display: 'flex', alignItems: 'center', marginRight: '20px' }}>
+                                <span style={{ color: '#ccc', marginRight: '10px', fontSize: '0.9rem' }}>Zoom</span>
+                                <input
+                                    type="range"
+                                    value={zoom}
+                                    min={1}
+                                    max={3}
+                                    step={0.1}
+                                    aria-labelledby="Zoom"
+                                    onChange={(e) => setZoom(e.target.value)}
+                                    className="zoom-range"
+                                    style={{ flex: 1, cursor: 'pointer' }}
+                                />
+                            </div>
+                            <div style={{ display: 'flex', gap: '10px' }}>
+                                <button className="btn btn-secondary" onClick={handleCropCancel}>Cancel</button>
+                                <button className="btn btn-primary" onClick={handleCropSave}>Crop & Save</button>
+                            </div>
                         </div>
                     </div>
                 </div>
