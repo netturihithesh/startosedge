@@ -203,15 +203,58 @@ const ProgramsDetail = () => {
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm('Delete this program?\n\nNote: This will delete the program details from the database, but the thumbnail and video files will remain in your Storage bucket.')) {
+        if (window.confirm('⚠️ WARNING: This will PERMANENTLY delete the program, its thumbnail, and ALL associated videos from both the database and storage.\n\nAre you sure you want to proceed?')) {
             try {
+                // Show loading indicator
+                const btn = document.activeElement;
+                if (btn) {
+                    btn.disabled = true;
+                    btn.innerText = 'Deleting...';
+                }
+
+                // 1. Fetch Program Details (for thumbnail)
+                const { data: program } = await supabase.from('programs').select('thumbnail_url').eq('id', id).single();
+
+                // 2. Fetch Associated Videos (for video files)
+                const { data: videos } = await supabase.from('program_videos').select('video_url').eq('program_id', id);
+
+                // 3. Delete Thumbnail from Storage
+                if (program?.thumbnail_url && program.thumbnail_url.includes('course-videos/')) {
+                    const path = program.thumbnail_url.split('course-videos/').pop();
+                    if (path) {
+                        const { error: storageError } = await supabase.storage.from('course-videos').remove([path]);
+                        if (storageError) console.warn('Failed to delete thumbnail:', storageError);
+                    }
+                }
+
+                // 4. Delete Video Files from Storage
+                if (videos && videos.length > 0) {
+                    const videoPaths = videos.map(v => {
+                        if (!v.video_url || !v.video_url.includes('course-videos/')) return null;
+                        return v.video_url.split('course-videos/').pop();
+                    }).filter(Boolean);
+
+                    if (videoPaths.length > 0) {
+                        const { error: videoStorageError } = await supabase.storage.from('course-videos').remove(videoPaths);
+                        if (videoStorageError) console.warn('Failed to delete videos:', videoStorageError);
+                    }
+                }
+
+                // 5. Delete Program from DB
                 const { error } = await supabase.from('programs').delete().eq('id', id);
                 if (error) throw error;
-                success('Program deleted');
+
+                success('Program and all associated files deleted successfully!');
                 fetchPrograms();
             } catch (error) {
                 console.error('Error deleting program:', error);
-                showError('Failed to delete program');
+                showError('Failed to delete program: ' + error.message);
+                // Re-enable button if failed
+                const btn = document.activeElement;
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerText = 'Delete';
+                }
             }
         }
     };
