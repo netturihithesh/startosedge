@@ -113,7 +113,7 @@ const About = () => {
                 <div className="container">
                     <div className="founder-content">
                         <div className="founder-image">
-                            <img src="/assets/founder.png" alt="Hari Krishna K" className="founder-avatar" />
+                            <img src="assets/founder.png" alt="Hari Krishna K" className="founder-avatar" />
                         </div>
                         <div className="founder-info">
                             <h2>Meet Hari Krishna K</h2>
