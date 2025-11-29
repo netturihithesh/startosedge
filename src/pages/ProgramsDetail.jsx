@@ -203,7 +203,7 @@ const ProgramsDetail = () => {
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm('Delete this program?')) {
+        if (window.confirm('Delete this program?\n\nNote: This will delete the program details from the database, but the thumbnail and video files will remain in your Storage bucket.')) {
             try {
                 const { error } = await supabase.from('programs').delete().eq('id', id);
                 if (error) throw error;
