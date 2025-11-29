@@ -657,20 +657,23 @@ const ProgramsDetail = () => {
                                                 alt={program.title}
                                                 onError={(e) => { e.target.src = 'https://via.placeholder.com/300x200?text=No+Image'; }}
                                             />
-                                            {program.is_featured && <span className="featured-badge">Featured</span>}
-                                            <span className="category-badge">{program.category}</span>
-
-                                            {isAdmin && (
-                                                <button
-                                                    className="edit-btn-pencil"
-                                                    title="Edit Program"
-                                                    onClick={(e) => { e.stopPropagation(); handleEditClick(program); }}
-                                                >
-                                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                                                </button>
-                                            )}
                                         </div>
                                         <div className="program-content">
+                                            <div className="program-badges-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                                                <div style={{ display: 'flex', gap: '8px' }}>
+                                                    {program.is_featured && <span className="badge-pill featured">Featured</span>}
+                                                    <span className="badge-pill category">{program.category}</span>
+                                                </div>
+                                                {isAdmin && (
+                                                    <button
+                                                        className="edit-btn-inline"
+                                                        title="Edit Program"
+                                                        onClick={(e) => { e.stopPropagation(); handleEditClick(program); }}
+                                                    >
+                                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                                    </button>
+                                                )}
+                                            </div>
                                             <h3>{program.title}</h3>
                                             <p className="program-description">{program.description}</p>
                                             <div className="program-meta">
