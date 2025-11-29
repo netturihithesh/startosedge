@@ -35,15 +35,7 @@ const Footer = () => {
                         </div>
                     </div>
 
-                    <div className="footer-column">
-                        <h4>Programs</h4>
-                        <ul className="footer-links">
-                            <li><a href="#">Full Stack Development</a></li>
-                            <li><a href="#">Data Science & ML</a></li>
-                            <li><a href="#">Cyber Security</a></li>
-                            <li><a href="#">Digital Marketing</a></li>
-                        </ul>
-                    </div>
+
 
                     <div className="footer-column">
                         <h4>Company</h4>
