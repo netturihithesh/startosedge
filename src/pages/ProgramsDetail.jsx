@@ -7,6 +7,7 @@ import { useToast } from '../hooks/useToast';
 import Toast from '../components/Toast';
 import { useNavigate } from 'react-router-dom';
 import './ProgramsDetail.css';
+import '../components/Modal.css';
 
 const ProgramsDetail = () => {
     const navigate = useNavigate();
