@@ -141,7 +141,7 @@ const Internships = () => {
                 <section className="section">
                     <div className="container">
                         <div className="admin-panel card">
-                            <h3>👑 Admin: Post New Internship</h3>
+                            <h3>Post New Internship</h3>
                             <form onSubmit={handleSubmit} className="admin-form">
                                 <div className="form-grid">
                                     <div className="form-group">
