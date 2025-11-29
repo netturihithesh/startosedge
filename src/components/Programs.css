@@ -16,6 +16,8 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-2xl);
+    /* Added margin to prevent overlap */
 }
 
 .program-card {
