@@ -65,6 +65,18 @@ const ProgramsDetail = () => {
         return () => unsubscribe();
     }, [navigate, showError]);
 
+    // Disable background scroll when modal is open
+    useEffect(() => {
+        if (showAddModal || showGrantModal) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [showAddModal, showGrantModal]);
+
     const fetchPrograms = async () => {
         try {
             const { data, error } = await supabase
