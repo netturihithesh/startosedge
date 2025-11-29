@@ -33,6 +33,8 @@ const ProgramsDetail = () => {
         thumbnail_url: '',
         is_featured: false
     });
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [showGrantModal, setShowGrantModal] = useState(false);
 
     const [thumbnailFile, setThumbnailFile] = useState(null);
     const [authLoading, setAuthLoading] = useState(true);
@@ -169,6 +171,7 @@ const ProgramsDetail = () => {
             });
             setThumbnailFile(null);
             setEditingProgram(null);
+            setShowAddModal(false);
             fetchPrograms();
         } catch (error) {
             console.error('Error saving program:', error);
@@ -190,7 +193,8 @@ const ProgramsDetail = () => {
             is_featured: program.is_featured
         });
         // Scroll to form
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // window.scrollTo({ top: 0, behavior: 'smooth' });
+        setShowAddModal(true);
     };
 
     const handleCancelEdit = () => {
@@ -298,6 +302,7 @@ const ProgramsDetail = () => {
             success(`✅ Access granted to ${grantEmail}!`);
             setGrantEmail('');
             setGrantProgramId('');
+            setShowGrantModal(false);
 
             // Refresh local state if the admin is granting access to themselves (edge case)
             if (grantEmail === userProfile.email) {
@@ -398,105 +403,133 @@ const ProgramsDetail = () => {
                 </div>
             </section>
 
-            {/* Admin Section */}
+            {/* Admin Controls Buttons */}
             {isAdmin && (
-                <section className="section">
+                <section className="section pb-0">
                     <div className="container">
-                        <div className="admin-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
-
-                            {/* Card 1: Add/Edit Program */}
-                            <div className="admin-panel card">
-                                <h3>{editingProgram ? 'Edit Program' : 'Add New Program'}</h3>
-                                <form onSubmit={handleSubmit} className="admin-form">
-                                    <div className="form-grid">
-                                        <div className="form-group">
-                                            <label>Program Title</label>
-                                            <input name="title" value={formData.title} onChange={handleChange} required placeholder="e.g. Full Stack Development" />
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Price</label>
-                                            <input name="price" value={formData.price} onChange={handleChange} required placeholder="e.g. ₹20,000" />
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Duration</label>
-                                            <input name="duration" value={formData.duration} onChange={handleChange} required placeholder="e.g. 6 Months" />
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Category</label>
-                                            <select name="category" value={formData.category} onChange={handleChange}>
-                                                <option value="technical">Technical</option>
-                                                <option value="non-technical">Non-Technical</option>
-                                            </select>
-                                        </div>
-                                        <div className="form-group">
-                                            <label>Thumbnail Image</label>
-                                            <input type="file" accept="image/*" onChange={handleFileChange} />
-                                            {thumbnailFile && <small className="text-muted">Selected: {thumbnailFile.name}</small>}
-                                            {!thumbnailFile && formData.thumbnail_url && <small className="text-muted">Current: <a href={formData.thumbnail_url} target="_blank" rel="noreferrer">View Image</a></small>}
-                                        </div>
-                                        <div className="form-group checkbox-group">
-                                            <label>
-                                                <input type="checkbox" name="is_featured" checked={formData.is_featured} onChange={handleChange} />
-                                                Feature on Home Page
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Description</label>
-                                        <textarea name="description" value={formData.description} onChange={handleChange} required rows="3" placeholder="Describe the program..."></textarea>
-                                    </div>
-                                    <div className="admin-form-actions">
-                                        <button type="submit" className="btn btn-primary" disabled={uploading}>
-                                            {uploading ? 'Saving...' : (editingProgram ? 'Update Program' : 'Add Program')}
-                                        </button>
-                                        {editingProgram && (
-                                            <button type="button" className="btn btn-secondary" onClick={handleCancelEdit}>
-                                                Cancel
-                                            </button>
-                                        )}
-                                    </div>
-                                </form>
-                            </div>
-
-                            {/* Card 2: Grant Access */}
-                            <div className="admin-panel card" style={{ height: 'fit-content' }}>
-                                <h3>Grant Course Access</h3>
-                                <p className="text-muted" style={{ marginBottom: '1rem' }}>
-                                    Enter the user's email from the Google Sheet to unlock the course for them.
-                                </p>
-                                <form onSubmit={handleGrantAccess} className="admin-form">
-                                    <div className="form-group">
-                                        <label>User Email</label>
-                                        <input
-                                            type="email"
-                                            value={grantEmail}
-                                            onChange={(e) => setGrantEmail(e.target.value)}
-                                            required
-                                            placeholder="user@example.com"
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Select Program</label>
-                                        <select
-                                            value={grantProgramId}
-                                            onChange={(e) => setGrantProgramId(e.target.value)}
-                                            required
-                                        >
-                                            <option value="">-- Select Course --</option>
-                                            {programs.map(p => (
-                                                <option key={p.id} value={p.id}>{p.title}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                    <button type="submit" className="btn btn-success">
-                                        Grant Access
-                                    </button>
-                                </form>
-                            </div>
-
+                        <div className="admin-controls-bar" style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                            <button className="btn btn-primary" onClick={() => { handleCancelEdit(); setShowAddModal(true); }}>
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20" style={{ marginRight: '8px' }}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                                Add New Program
+                            </button>
+                            <button className="btn btn-success" onClick={() => setShowGrantModal(true)}>
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20" style={{ marginRight: '8px' }}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+                                Grant Access
+                            </button>
                         </div>
                     </div>
                 </section>
+            )}
+
+            {/* Add/Edit Program Modal */}
+            {showAddModal && (
+                <div className="modal-overlay" onClick={() => setShowAddModal(false)}>
+                    <div className="modal-content" style={{ maxWidth: '800px', width: '90%' }} onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3>{editingProgram ? 'Edit Program' : 'Add New Program'}</h3>
+                            <button className="modal-close" onClick={() => setShowAddModal(false)}>×</button>
+                        </div>
+                        <div className="modal-body">
+                            <form onSubmit={handleSubmit} className="admin-form">
+                                <div className="form-grid">
+                                    <div className="form-group">
+                                        <label>Program Title</label>
+                                        <input name="title" value={formData.title} onChange={handleChange} required placeholder="e.g. Full Stack Development" />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Price</label>
+                                        <input name="price" value={formData.price} onChange={handleChange} required placeholder="e.g. ₹20,000" />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Duration</label>
+                                        <input name="duration" value={formData.duration} onChange={handleChange} required placeholder="e.g. 6 Months" />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Category</label>
+                                        <select name="category" value={formData.category} onChange={handleChange}>
+                                            <option value="technical">Technical</option>
+                                            <option value="non-technical">Non-Technical</option>
+                                        </select>
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Thumbnail Image</label>
+                                        <input type="file" accept="image/*" onChange={handleFileChange} />
+                                        {thumbnailFile && <small className="text-muted">Selected: {thumbnailFile.name}</small>}
+                                        {!thumbnailFile && formData.thumbnail_url && <small className="text-muted">Current: <a href={formData.thumbnail_url} target="_blank" rel="noreferrer">View Image</a></small>}
+                                    </div>
+                                    <div className="form-group checkbox-group">
+                                        <label>
+                                            <input type="checkbox" name="is_featured" checked={formData.is_featured} onChange={handleChange} />
+                                            Feature on Home Page
+                                        </label>
+                                    </div>
+                                </div>
+                                <div className="form-group">
+                                    <label>Description</label>
+                                    <textarea name="description" value={formData.description} onChange={handleChange} required rows="3" placeholder="Describe the program..."></textarea>
+                                </div>
+                                <div className="admin-form-actions" style={{ marginTop: '1rem', display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+                                    <button type="button" className="btn btn-secondary" onClick={() => setShowAddModal(false)}>
+                                        Cancel
+                                    </button>
+                                    <button type="submit" className="btn btn-primary" disabled={uploading}>
+                                        {uploading ? 'Saving...' : (editingProgram ? 'Update Program' : 'Add Program')}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Grant Access Modal */}
+            {showGrantModal && (
+                <div className="modal-overlay" onClick={() => setShowGrantModal(false)}>
+                    <div className="modal-content" style={{ maxWidth: '500px', width: '90%' }} onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3>Grant Course Access</h3>
+                            <button className="modal-close" onClick={() => setShowGrantModal(false)}>×</button>
+                        </div>
+                        <div className="modal-body">
+                            <p className="text-muted" style={{ marginBottom: '1rem' }}>
+                                Enter the user's email to unlock the course for them.
+                            </p>
+                            <form onSubmit={handleGrantAccess} className="admin-form">
+                                <div className="form-group">
+                                    <label>User Email</label>
+                                    <input
+                                        type="email"
+                                        value={grantEmail}
+                                        onChange={(e) => setGrantEmail(e.target.value)}
+                                        required
+                                        placeholder="user@example.com"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Select Program</label>
+                                    <select
+                                        value={grantProgramId}
+                                        onChange={(e) => setGrantProgramId(e.target.value)}
+                                        required
+                                    >
+                                        <option value="">-- Select Course --</option>
+                                        {programs.map(p => (
+                                            <option key={p.id} value={p.id}>{p.title}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="admin-form-actions" style={{ marginTop: '1rem', display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+                                    <button type="button" className="btn btn-secondary" onClick={() => setShowGrantModal(false)}>
+                                        Cancel
+                                    </button>
+                                    <button type="submit" className="btn btn-success">
+                                        Grant Access
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             )}
 
             {/* Filter Bar */}
