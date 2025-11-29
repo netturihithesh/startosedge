@@ -135,8 +135,10 @@
 
 .category-badge {
     position: absolute;
-    top: 12px;
+    bottom: 12px;
+    /* Moved to bottom */
     right: 12px;
+    top: auto;
     background: rgba(10, 11, 30, 0.85);
     backdrop-filter: blur(8px);
     color: white;
@@ -170,7 +172,6 @@
     position: absolute;
     top: 12px;
     right: 12px;
-    /* Positioned at top right */
     width: 36px;
     height: 36px;
     border-radius: 50%;
@@ -190,12 +191,6 @@
     transform: scale(1.1);
     background: #fff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-/* Adjust category badge if admin is present to avoid overlap */
-.admin-mode .category-badge {
-    right: 56px;
-    /* Move left to make room for pencil */
 }
 
 .program-content {
@@ -348,7 +343,6 @@
     display: flex;
     gap: 1rem;
     margin-top: 2rem;
-    /* Increased gap */
 }
 
 .admin-form-actions .btn {
