@@ -363,7 +363,7 @@ const ProgramsDetail = () => {
 
                             {/* Card 1: Add/Edit Program */}
                             <div className="admin-panel card">
-                                <h3>{editingProgram ? '✏️ Edit Program' : '👑 Add New Program'}</h3>
+                                <h3>{editingProgram ? 'Edit Program' : 'Add New Program'}</h3>
                                 <form onSubmit={handleSubmit} className="admin-form">
                                     <div className="form-grid">
                                         <div className="form-group">
@@ -417,7 +417,7 @@ const ProgramsDetail = () => {
 
                             {/* Card 2: Grant Access */}
                             <div className="admin-panel card" style={{ height: 'fit-content' }}>
-                                <h3>🔓 Grant Course Access</h3>
+                                <h3>Grant Course Access</h3>
                                 <p className="text-muted" style={{ marginBottom: '1rem' }}>
                                     Enter the user's email from the Google Sheet to unlock the course for them.
                                 </p>
@@ -446,7 +446,7 @@ const ProgramsDetail = () => {
                                         </select>
                                     </div>
                                     <button type="submit" className="btn btn-success">
-                                        ✅ Grant Access
+                                        Grant Access
                                     </button>
                                 </form>
                             </div>
@@ -495,7 +495,7 @@ const ProgramsDetail = () => {
                                                     title="Edit Program"
                                                     onClick={(e) => { e.stopPropagation(); handleEditClick(program); }}
                                                 >
-                                                    ✏️
+                                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                                 </button>
                                             )}
                                         </div>
@@ -524,7 +524,7 @@ const ProgramsDetail = () => {
                                                     className="btn btn-success"
                                                     onClick={() => navigate(`/programs/${program.id}`)}
                                                 >
-                                                    ▶ Access Course
+                                                    Access Course
                                                 </button>
                                             ) : (
                                                 <button
@@ -532,7 +532,7 @@ const ProgramsDetail = () => {
                                                     className="btn btn-primary"
                                                     onClick={() => handleBuyRequest(program)}
                                                 >
-                                                    🛒 Buy Now
+                                                    Buy Now
                                                 </button>
                                             )}
 

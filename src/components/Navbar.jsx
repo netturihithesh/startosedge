@@ -114,16 +114,16 @@ const Navbar = () => {
                                         <span className="mobile-user-name">{user.name}</span>
                                     </div>
                                     <button onClick={() => { handleLogout(); handleLinkClick(); }} className="nav-link mobile-nav-btn">
-                                        🚪 Logout
+                                        Logout
                                     </button>
                                 </>
                             ) : (
                                 <>
                                     <Link to="/login" className="nav-link mobile-nav-btn" onClick={handleLinkClick}>
-                                        🔐 Login
+                                        Login
                                     </Link>
                                     <Link to="/signup" className="nav-link mobile-nav-btn" onClick={handleLinkClick}>
-                                        ✨ Get Started
+                                        Get Started
                                     </Link>
                                 </>
                             )}

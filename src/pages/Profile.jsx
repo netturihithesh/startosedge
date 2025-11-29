@@ -170,15 +170,15 @@ const Profile = () => {
                     <div className="profile-actions">
                         {!isEditing ? (
                             <button className="btn btn-primary" onClick={() => setIsEditing(true)}>
-                                ✏️ Edit Profile
+                                Edit Profile
                             </button>
                         ) : (
                             <button className="btn btn-secondary" onClick={() => setIsEditing(false)}>
-                                ❌ Cancel
+                                Cancel
                             </button>
                         )}
                         <button className="btn btn-danger" onClick={handleLogout}>
-                            🚪 Logout
+                            Logout
                         </button>
                     </div>
                 </div>
@@ -202,7 +202,7 @@ const Profile = () => {
 
                 <form onSubmit={handleSave} className="profile-form">
                     <div className="form-section card">
-                        <h2>👤 Personal Information</h2>
+                        <h2>Personal Information</h2>
                         <div className="form-grid">
                             <div className="form-group">
                                 <label>Full Name</label>
@@ -240,7 +240,7 @@ const Profile = () => {
                     </div>
 
                     <div className="form-section card">
-                        <h2>🎓 Education</h2>
+                        <h2>Education</h2>
                         <div className="form-grid">
                             <div className="form-group">
                                 <label>College/University</label>
@@ -279,7 +279,7 @@ const Profile = () => {
                     </div>
 
                     <div className="form-section card">
-                        <h2>🔗 Professional Links</h2>
+                        <h2>Professional Links</h2>
                         <div className="form-grid">
                             <div className="form-group">
                                 <label>LinkedIn</label>
@@ -318,7 +318,7 @@ const Profile = () => {
                     </div>
 
                     <div className="form-section card">
-                        <h2>📝 About</h2>
+                        <h2>About</h2>
                         <div className="form-group">
                             <label>Bio</label>
                             <textarea
@@ -346,7 +346,7 @@ const Profile = () => {
                     {isEditing && (
                         <div className="form-actions">
                             <button type="submit" className="btn btn-primary btn-lg" disabled={saving}>
-                                {saving ? 'Saving...' : '💾 Save Changes'}
+                                {saving ? 'Saving...' : 'Save Changes'}
                             </button>
                         </div>
                     )}
