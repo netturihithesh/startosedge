@@ -266,7 +266,7 @@ const CourseViewer = () => {
                     {/* Admin: Add Video Form */}
                     {isAdmin && (
                         <div className="admin-video-panel card">
-                            <h3>👑 Admin: Upload New Video</h3>
+                            <h3>Upload New Video</h3>
                             <form onSubmit={handleAddVideo}>
                                 <div className="form-group">
                                     <label>Video Title</label>
