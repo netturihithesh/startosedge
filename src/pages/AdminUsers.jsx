@@ -356,14 +356,14 @@ const AdminUsers = () => {
                                 ) : (
                                     filteredUsers.map(user => (
                                         <tr key={user.id}>
-                                            <td>{user.name || 'N/A'}</td>
-                                            <td>{user.email}</td>
-                                            <td>
+                                            <td data-label="Name">{user.name || 'N/A'}</td>
+                                            <td data-label="Email">{user.email}</td>
+                                            <td data-label="Role">
                                                 <span className={`role-badge ${user.role || 'user'}`}>
                                                     {user.role === 'super_admin' ? 'Super Admin' : (user.role === 'admin' ? 'Admin' : 'User')}
                                                 </span>
                                             </td>
-                                            <td>
+                                            <td data-label="Enrolled Courses">
                                                 {(user.role === 'admin' || user.role === 'super_admin') ? (
                                                     <span className="access-badge active">All Access (Admin)</span>
                                                 ) : (
@@ -383,8 +383,8 @@ const AdminUsers = () => {
                                                     )
                                                 )}
                                             </td>
-                                            <td>{user.createdAt?.toLocaleDateString() || 'N/A'}</td>
-                                            <td>
+                                            <td data-label="Created">{user.createdAt?.toLocaleDateString() || 'N/A'}</td>
+                                            <td data-label="Actions">
                                                 <div className="action-buttons">
                                                     <button
                                                         className="btn-icon edit"
