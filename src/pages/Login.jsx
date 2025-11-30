@@ -99,7 +99,19 @@ const Login = () => {
             }, 1500);
         } catch (error) {
             console.error('Google login error:', error);
-            showError('Google login failed.');
+            let msg = 'Google login failed.';
+            if (error.code === 'auth/popup-closed-by-user') {
+                msg = 'Login cancelled by user.';
+            } else if (error.code === 'auth/popup-blocked') {
+                msg = 'Login popup blocked by browser. Please allow popups.';
+            } else if (error.code === 'auth/operation-not-allowed') {
+                msg = 'Google login is not enabled. Contact admin.';
+            } else if (error.code === 'auth/unauthorized-domain') {
+                msg = 'This domain is not authorized for login. Contact admin.';
+            } else if (error.message) {
+                msg = `Login failed: ${error.message}`;
+            }
+            showError(msg);
         }
     };
 

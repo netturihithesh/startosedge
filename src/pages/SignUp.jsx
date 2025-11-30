@@ -95,7 +95,19 @@ const SignUp = () => {
             }, 1500);
         } catch (error) {
             console.error('Google signup error:', error);
-            showError('Google signup failed.');
+            let msg = 'Google signup failed.';
+            if (error.code === 'auth/popup-closed-by-user') {
+                msg = 'Signup cancelled by user.';
+            } else if (error.code === 'auth/popup-blocked') {
+                msg = 'Signup popup blocked by browser. Please allow popups.';
+            } else if (error.code === 'auth/operation-not-allowed') {
+                msg = 'Google signup is not enabled. Contact admin.';
+            } else if (error.code === 'auth/unauthorized-domain') {
+                msg = 'This domain is not authorized for signup. Contact admin.';
+            } else if (error.message) {
+                msg = `Signup failed: ${error.message}`;
+            }
+            showError(msg);
         }
     };
 
