@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
@@ -11,6 +11,8 @@ const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const { isAdmin } = useAdmin();
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Listen for Firebase auth state changes
@@ -50,7 +52,7 @@ const Navbar = () => {
         try {
             await signOut(auth);
             setUser(null);
-            window.location.href = '/';
+            navigate('/');
         } catch (error) {
             console.error('Logout error:', error);
         }
