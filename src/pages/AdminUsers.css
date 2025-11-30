@@ -408,19 +408,6 @@
         flex-direction: column;
     }
 
-    .search-box,
-    .filter-box {
-        min-width: 100%;
-    }
-
-    .users-stats {
-        grid-template-columns: 1fr;
-    }
-
-    .edit-user-modal {
-        min-width: auto;
-        margin: var(--spacing-lg);
-    }
 
     /* Card View Transformation */
     .users-table-container {
