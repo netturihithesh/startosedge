@@ -182,7 +182,6 @@
 .action-buttons {
     display: flex;
     gap: 1rem;
-    /* Increased gap */
 }
 
 .btn-icon {
@@ -201,7 +200,6 @@
 
 .btn-icon.edit {
     color: #818cf8;
-    /* Indigo-400 */
     background: rgba(99, 102, 241, 0.1);
     border: 1px solid rgba(99, 102, 241, 0.2);
 }
@@ -214,7 +212,6 @@
 
 .btn-icon.delete {
     color: #f87171;
-    /* Red-400 */
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid rgba(239, 68, 68, 0.2);
 }
@@ -460,6 +457,20 @@
         align-items: center;
         padding: var(--spacing-sm) 0;
         border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        text-align: right;
+        font-size: 0.9rem;
+    }
+
+    .users-table td:last-child {
+        border-bottom: none;
+        padding-top: var(--spacing-md);
+    }
+
+    .users-table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--text-secondary);
         margin-right: var(--spacing-md);
         text-align: left;
         flex-shrink: 0;
