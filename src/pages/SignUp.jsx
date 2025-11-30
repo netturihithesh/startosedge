@@ -86,7 +86,9 @@ const SignUp = () => {
                 await auth.signOut(); // Prevent auto-login
                 showError('Account already exists with this email. Please log in.');
                 setTimeout(() => {
-                    navigate('/login');
+                    // Force reload to ensure auth state is clean in UI
+                    window.location.href = '#/login';
+                    window.location.reload();
                 }, 2000);
                 return;
             }
