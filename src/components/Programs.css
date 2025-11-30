@@ -17,7 +17,6 @@
     grid-template-columns: repeat(4, 1fr);
     gap: var(--spacing-lg);
     margin-bottom: var(--spacing-2xl);
-    /* Added margin to prevent overlap */
 }
 
 .program-card {
@@ -27,7 +26,6 @@
     position: relative;
     overflow: hidden;
     padding: 0;
-    /* Remove default padding to let image fill width */
     border: 1px solid var(--border-light);
     background: var(--bg-card);
     transition: transform var(--transition-base), box-shadow var(--transition-base);
@@ -137,7 +135,44 @@
 
 @media (max-width: 768px) {
     .programs-grid {
-        grid-template-columns: 1fr;
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: var(--spacing-md);
+        padding-bottom: var(--spacing-lg);
+        /* Space for scrollbar */
+        padding-left: var(--spacing-md);
+        padding-right: var(--spacing-md);
+        margin-left: calc(var(--spacing-md) * -1);
+        margin-right: calc(var(--spacing-md) * -1);
+
+        /* Custom Scrollbar */
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary) rgba(255, 255, 255, 0.1);
+    }
+
+    .programs-grid::-webkit-scrollbar {
+        display: block;
+        height: 6px;
+    }
+
+    .programs-grid::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        margin: 0 var(--spacing-md);
+    }
+
+    .programs-grid::-webkit-scrollbar-thumb {
+        background: var(--primary);
+        border-radius: 10px;
+    }
+
+    .program-card {
+        min-width: 80vw;
+        /* Ensure next card is visible (peeking) */
+        max-width: 340px;
+        scroll-snap-align: center;
+        flex-shrink: 0;
     }
 
     .section-header h2 {

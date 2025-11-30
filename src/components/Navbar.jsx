@@ -76,6 +76,18 @@ const Navbar = () => {
         };
     }, []);
 
+    // Disable scroll when mobile menu is open
+    useEffect(() => {
+        if (isMobileMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isMobileMenuOpen]);
+
     const handleLinkClick = () => {
         setIsMobileMenuOpen(false);
     };
@@ -84,17 +96,36 @@ const Navbar = () => {
         <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
             <div className="container">
                 <div className="navbar-content">
+                    <button
+                        className="mobile-menu-toggle"
+                        onClick={() => {
+                            console.log('Toggle clicked, new state:', !isMobileMenuOpen);
+                            setIsMobileMenuOpen(!isMobileMenuOpen);
+                        }}
+                        aria-label="Toggle mobile menu"
+                    >
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+
                     <div className="navbar-logo">
                         <Link to="/" className="logo-text" onClick={handleLinkClick}>StartosEdge</Link>
                     </div>
 
                     <div className={`navbar-links ${isMobileMenuOpen ? 'active' : ''}`}>
+                        <button
+                            className="mobile-menu-close"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            aria-label="Close menu"
+                        >
+                            &times;
+                        </button>
                         <Link to="/" className="nav-link" onClick={handleLinkClick}>Home</Link>
                         <Link to="/programs" className="nav-link" onClick={handleLinkClick}>Programs</Link>
                         <Link to="/internships" className="nav-link" onClick={handleLinkClick}>Internships</Link>
                         <Link to="/taskhub" className="nav-link" onClick={handleLinkClick}>TaskHub</Link>
                         <Link to="/collaborate" className="nav-link" onClick={handleLinkClick}>Collaborate</Link>
-                        <Link to="/about" className="nav-link" onClick={handleLinkClick}>About Us</Link>
                         {isAdmin && (
                             <Link to="/admin/users" className="nav-link admin-link" onClick={handleLinkClick}>
                                 Admin
@@ -105,14 +136,6 @@ const Navbar = () => {
                         <div className="mobile-user-section">
                             {user ? (
                                 <>
-                                    <div className="mobile-user-info">
-                                        <Link to="/profile" onClick={handleLinkClick} style={{ textDecoration: 'none' }}>
-                                            <div className="profile-avatar-small">
-                                                {user.name.charAt(0).toUpperCase()}
-                                            </div>
-                                        </Link>
-                                        <span className="mobile-user-name">{user.name}</span>
-                                    </div>
                                     <button onClick={() => { handleLogout(); handleLinkClick(); }} className="nav-link mobile-nav-btn">
                                         Logout
                                     </button>
@@ -148,16 +171,6 @@ const Navbar = () => {
                             </>
                         )}
                     </div>
-
-                    <button
-                        className="mobile-menu-toggle"
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        aria-label="Toggle mobile menu"
-                    >
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
                 </div>
             </div>
         </nav>

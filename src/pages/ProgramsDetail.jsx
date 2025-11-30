@@ -659,8 +659,8 @@ const ProgramsDetail = () => {
                                             />
                                         </div>
                                         <div className="program-content">
-                                            <div className="program-badges-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                                                <div style={{ display: 'flex', gap: '8px' }}>
+                                            <div className="program-badges-row">
+                                                <div className="badges-group">
                                                     {program.is_featured && <span className="badge-pill featured">Featured</span>}
                                                     <span className="badge-pill category">{program.category}</span>
                                                 </div>
