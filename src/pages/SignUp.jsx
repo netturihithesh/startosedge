@@ -77,6 +77,7 @@ const SignUp = () => {
     };
 
     const handleGoogleSignUp = async () => {
+        setLoading(true);
         try {
             const result = await signInWithPopup(auth, googleProvider);
             const user = result.user;
@@ -120,11 +121,18 @@ const SignUp = () => {
                 msg = `Signup failed: ${error.message}`;
             }
             showError(msg);
+            setLoading(false);
         }
     };
 
     return (
         <div className="signup-page">
+            {loading && (
+                <div className="full-screen-loader">
+                    <div className="spinner"></div>
+                    <p>Processing...</p>
+                </div>
+            )}
             {toasts.map(toast => (
                 <Toast key={toast.id} message={toast.message} type={toast.type} onClose={() => removeToast(toast.id)} />
             ))}
