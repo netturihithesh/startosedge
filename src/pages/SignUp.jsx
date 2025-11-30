@@ -83,9 +83,10 @@ const SignUp = () => {
             const additionalUserInfo = getAdditionalUserInfo(result);
 
             if (!additionalUserInfo?.isNewUser) {
-                showError('Account already exists with this email. Logging you in...');
+                await auth.signOut(); // Prevent auto-login
+                showError('Account already exists with this email. Please log in.');
                 setTimeout(() => {
-                    navigate('/');
+                    navigate('/login');
                 }, 2000);
                 return;
             }
