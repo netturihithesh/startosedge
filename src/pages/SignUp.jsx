@@ -6,6 +6,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useToast } from '../hooks/useToast';
 import Toast from '../components/Toast';
+import Modal from '../components/Modal';
 import './SignUp.css';
 
 const SignUp = () => {
@@ -18,6 +19,18 @@ const SignUp = () => {
         confirmPassword: ''
     });
     const [loading, setLoading] = useState(false);
+    const [showExistingUserModal, setShowExistingUserModal] = useState(false);
+
+    const handleExistingUserLogin = () => {
+        setShowExistingUserModal(false);
+        navigate('/');
+    };
+
+    const handleExistingUserCancel = async () => {
+        await auth.signOut();
+        setShowExistingUserModal(false);
+        setLoading(false);
+    };
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -84,13 +97,8 @@ const SignUp = () => {
             const additionalUserInfo = getAdditionalUserInfo(result);
 
             if (!additionalUserInfo?.isNewUser) {
-                await auth.signOut(); // Prevent auto-login
-                showError('Account already exists with this email. Please log in.');
-                setTimeout(() => {
-                    // Force reload to ensure auth state is clean in UI
-                    window.location.href = '#/login';
-                    window.location.reload();
-                }, 2000);
+                setShowExistingUserModal(true);
+                setLoading(false);
                 return;
             }
 
@@ -127,6 +135,19 @@ const SignUp = () => {
 
     return (
         <div className="signup-page">
+            {showExistingUserModal && (
+                <>
+                    <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'var(--bg-primary)', zIndex: 10000 }}></div>
+                    <Modal
+                        title="Account Exists"
+                        message="You already have an account with this email. Do you want to log in?"
+                        onConfirm={handleExistingUserLogin}
+                        onCancel={handleExistingUserCancel}
+                        confirmText="Yes, Log In"
+                        type="confirm"
+                    />
+                </>
+            )}
             {loading && (
                 <div className="full-screen-loader">
                     <div className="spinner"></div>
