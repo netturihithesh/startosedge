@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { auth, googleProvider } from '../firebase';
-import { createUserWithEmailAndPassword, signInWithPopup, sendEmailVerification } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithPopup, sendEmailVerification, getAdditionalUserInfo } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useToast } from '../hooks/useToast';
@@ -80,6 +80,15 @@ const SignUp = () => {
         try {
             const result = await signInWithPopup(auth, googleProvider);
             const user = result.user;
+            const additionalUserInfo = getAdditionalUserInfo(result);
+
+            if (!additionalUserInfo?.isNewUser) {
+                showError('Account already exists with this email. Logging you in...');
+                setTimeout(() => {
+                    navigate('/');
+                }, 2000);
+                return;
+            }
 
             // Create user document in Firestore if doesn't exist
             await setDoc(doc(db, 'users', user.uid), {
