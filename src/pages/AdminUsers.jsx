@@ -103,14 +103,16 @@ const AdminUsers = () => {
             }
 
             // 1. Try to delete from Firebase Authentication (via Backend)
+            let authDeleted = false;
             try {
                 const response = await fetch(`http://localhost:5000/api/users/${selectedUser.id}`, {
                     method: 'DELETE',
                 });
 
-                if (!response.ok) {
-                    console.warn('Failed to delete from Auth (Backend might be down or unconfigured)');
-                    // We continue to delete from Firestore anyway
+                if (response.ok) {
+                    authDeleted = true;
+                } else {
+                    console.warn('Failed to delete from Auth (Backend returned error)');
                 }
             } catch (serverError) {
                 console.warn('Backend server not reachable:', serverError);
@@ -119,7 +121,13 @@ const AdminUsers = () => {
             // 2. Delete from Firestore
             await deleteDoc(doc(db, 'users', selectedUser.id));
 
-            success(`User ${selectedUser.name || selectedUser.email} has been deleted.`);
+            if (authDeleted) {
+                success(`User ${selectedUser.name || selectedUser.email} deleted from Database and Auth.`);
+            } else {
+                // Show a warning if Auth deletion failed
+                showError(`User deleted from Database, but NOT from Auth (Email will remain in use). Check Server.`);
+            }
+
             setShowDeleteModal(false);
             setSelectedUser(null);
             fetchUsers();
