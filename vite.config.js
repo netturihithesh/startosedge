@@ -7,5 +7,6 @@ export default defineConfig({
   base: './',
   build: {
     outDir: 'docs',
+    sourcemap: false, // Prevent users from seeing original source code
   },
 })

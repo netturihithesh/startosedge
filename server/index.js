@@ -19,10 +19,10 @@ try {
     } else {
         console.warn('⚠️ Firebase Admin NOT initialized. Missing credentials. User deletion from Auth will fail.');
         // You can uncomment this if you put the service-account.json in the server folder
-        // const serviceAccount = require('./service-account.json');
-        // admin.initializeApp({
-        //     credential: admin.credential.cert(serviceAccount)
-        // });
+        const serviceAccount = require('./service-account.json');
+        admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount)
+        });
     }
 } catch (error) {
     console.error('Error initializing Firebase Admin:', error);
